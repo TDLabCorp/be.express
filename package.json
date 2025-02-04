@@ -1,0 +1,33 @@
+{
+  "name": "be.express",
+  "version": "1.0.0",
+  "description": "백엔드 보일러플레이트",
+  "main": "dist/App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "tsc && node ./build/App.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q ./build/App.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TDLabCorp/be.express.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TDLabCorp/be.express/issues"
+  },
+  "homepage": "https://github.com/TDLabCorp/be.express#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
