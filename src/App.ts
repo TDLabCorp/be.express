@@ -4,8 +4,19 @@ import { intercepter } from "./Intercepter";
 import "./main";
 import { dispatch } from "./Dispatcher";
 import cors from "cors";
+import session from "express-session";
 
 const app: Express = express();
+
+app.use(
+  session({
+    secret: "MUIOCJD",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
+
 const port = 5000;
 
 app.all("*", (request: Request, response: Response, next: NextFunction) => {
@@ -22,7 +33,6 @@ app.use((err: Error, request: Request, response: Response, next: any) => {
 });
 
 app.use(cors());
-
 app.listen(port, () => {
   logger(`Server is running at <https://localhost>:${port}`);
 });
