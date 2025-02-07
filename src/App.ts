@@ -24,5 +24,5 @@ app.use((err: Error, request: Request, response: Response, next: any) => {
 app.use(cors());
 
 app.listen(port, () => {
-  logger(`[server]: Server is running at <https://localhost>:${port}`);
+  logger(`Server is running at <https://localhost>:${port}`);
 });
