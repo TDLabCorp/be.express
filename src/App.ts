@@ -3,6 +3,7 @@ import { logger } from "./Logger";
 import { intercepter } from "./Intercepter";
 import "./main";
 import { dispatch } from "./Dispatcher";
+import cors from "cors";
 
 const app: Express = express();
 const port = 5000;
@@ -19,6 +20,8 @@ app.use((err: Error, request: Request, response: Response, next: any) => {
   response.status(500);
   response.json({ message: err.message });
 });
+
+app.use(cors());
 
 app.listen(port, () => {
   logger(`[server]: Server is running at <https://localhost>:${port}`);
