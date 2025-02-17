@@ -9,6 +9,7 @@ import {
 import { logger } from "../../Logger";
 import { Session } from "../../service";
 import { encrypt } from "../../util";
+import { errorResponse, resultResponse } from "../../util/Response";
 
 declare namespace Model {
   export interface Session {
@@ -30,9 +31,11 @@ class Login {
     const { session } = request;
 
     if (session.auth) {
-      response.json(_.omit(session.auth, ["id"]));
+      const { auth } = session;
+      resultResponse(response, { auth });
     } else {
-      response.sendStatus(401);
+      // response.sendStatus(401);
+      errorResponse(response, "NotAllowPermit");
     }
   }
 
@@ -41,15 +44,15 @@ class Login {
     const {
       session,
       params,
-      body: { id, password },
+      body: { user_id, password },
     } = request;
 
     if (session.auth) {
-      logger(`session: ${JSON.stringify(session.auth)}`);
-      response.sendStatus(200);
+      const { auth } = session;
+      resultResponse(response, { auth });
     } else {
       try {
-        const user = await Session.findUser(id);
+        const user = await Session.findUser(user_id);
         if (user?.password == encrypt(password)) {
           session.auth = {
             name: user.name,
@@ -58,19 +61,24 @@ class Login {
           };
           session.save((err) => {
             if (err) {
-              throw new Error("로그인에 실패하였습니다.");
+              // throw new Error("로그인에 실패하였습니다.");
+              errorResponse(response, "SignInFailure");
             } else {
-              response.json({ message: "로그인 성공" });
-              logger(`session.save((err))`);
+              // response.json({ message: "로그인 성공" });
+              // logger(`session.save((err))`);
+              const { auth } = session;
+              resultResponse(response, { auth });
             }
           });
         } else {
-          throw new Error("로그인에 실패하였습니다.");
+          // throw new Error("로그인에 실패하였습니다.");
+          errorResponse(response, "SignInFailure");
         }
       } catch (err) {
-        logger(`raised exception - ${err}`);
-        response.sendStatus(500);
+        // logger(`raised exception - ${err}`);
+        // response.sendStatus(500);
         // throw err;
+        errorResponse(response, "SignInFailure");
       }
     }
   }

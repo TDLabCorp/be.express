@@ -2,6 +2,7 @@ import { Statement } from "sqlite3";
 import { logger } from "../Logger";
 import { decrypt, encrypt } from "../util";
 import { sqlite } from "./db";
+import _ from "lodash";
 
 interface User {
   id: string;
@@ -17,6 +18,11 @@ export const findUser = (id: string): Promise<User | undefined> => {
       (err: Error, rows: any[]) => {
         if (err) {
           reject(err);
+        }
+
+        logger(`${JSON.stringify(rows)}`);
+        if (_.isEmpty(rows)) {
+          resolve(undefined);
         }
         rows.forEach((row) => {
           resolve(row);
